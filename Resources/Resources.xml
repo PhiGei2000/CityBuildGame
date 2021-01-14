@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Resouces xmlns="http://www.citybuildgame.de/resources">
+    <Shaders>
+        <Resource id="GROUND_SHADER" filename="Shaders/ground"/>
+    </Shaders>
+    <Textures>
+        <!--<Resource id="GROUND_TEXTURE" filename="Textures/ground.png" />-->
+    </Textures>
+    <Geometries>
+        <Resource id="GROUND_GEOMETRY" filename="Models/ground.obj" />
+    </Geometries>
+    <Materials>
+
+    </Materials>
+</Resouces>

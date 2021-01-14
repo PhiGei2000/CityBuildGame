@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using CityBuildGame.Rendering;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 
-namespace CityBuildGame.Rendering
+namespace CityBuildGame.Resources
 {
-    public class Geometry : IDisposable
+    public class Geometry : IResource<Geometry>
     {
         private int vao;
         private int ebo;
         private int vbo;
         private int drawCount;
+        private bool disposedValue;
+
+        public ResourceTypes ResourceType => ResourceTypes.GEOMETRY;
 
         public Geometry()
         {
@@ -48,18 +51,29 @@ namespace CityBuildGame.Rendering
         public void Draw()
         {
             GL.BindVertexArray(vao);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, drawCount);
+            GL.DrawElements(PrimitiveType.Triangles, drawCount, DrawElementsType.UnsignedInt, 0);
         }
 
         public void Dispose()
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
-            GL.BindVertexArray(0);
+            if (!disposedValue)
+            {
+                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+                GL.BindVertexArray(0);
 
-            GL.DeleteBuffer(vbo);
-            GL.DeleteBuffer(ebo);
-            GL.DeleteVertexArray(vao);
+                GL.DeleteBuffer(vbo);
+                GL.DeleteBuffer(ebo);
+                GL.DeleteVertexArray(vao);
+                disposedValue = true;
+            }
+
+            GC.SuppressFinalize(this);
+        }
+
+        public Geometry Get()
+        {
+            return this;
         }
     }
 }

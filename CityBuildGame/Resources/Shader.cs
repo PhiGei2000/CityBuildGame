@@ -5,18 +5,24 @@ using System.IO;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 
-namespace CityBuildGame.Rendering
+namespace CityBuildGame.Resources
 {
-    public class Shader : IDisposable
+    public struct Shader : IResource<Shader>
     {
         private Dictionary<string, int> uniformLocations;
         private int program;
         private bool disposedValue;
 
+        public ResourceTypes ResourceType => ResourceTypes.SHADER;
+
         public Shader(string filename)
         {
+            disposedValue = false;
+            uniformLocations = new Dictionary<string, int>();
+
             string vertexShaderSource = File.ReadAllText($"{filename}.vert");
             string fragmentShaderSource = File.ReadAllText($"{filename}.frag");
+            program = GL.CreateProgram();
 
             int vertexShader = GL.CreateShader(ShaderType.VertexShader);
             CompileShader(vertexShader, vertexShaderSource);
@@ -24,7 +30,6 @@ namespace CityBuildGame.Rendering
             int fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
             CompileShader(fragmentShader, fragmentShaderSource);
 
-            program = GL.CreateProgram();
             GL.AttachShader(program, vertexShader);
             GL.AttachShader(program, fragmentShader);
 
@@ -62,7 +67,7 @@ namespace CityBuildGame.Rendering
             }
             else
             {
-                uniformLocation = GL.GetAttribLocation(program, location);
+                uniformLocation = GL.GetUniformLocation(program, location);
                 uniformLocations.Add(location, uniformLocation);
             }
 
@@ -78,35 +83,25 @@ namespace CityBuildGame.Rendering
                     GL.Uniform3(uniformLocation, vec3);
                     break;
                 case Matrix3 mat3:
-                    GL.UniformMatrix3(uniformLocation, true, ref mat3);
+                    GL.UniformMatrix3(uniformLocation, false, ref mat3);
                     break;
                 case Matrix4 mat4:
-                    GL.UniformMatrix4(uniformLocation, true, ref mat4);
+                    GL.UniformMatrix4(uniformLocation, false, ref mat4);
                     break;
                 default:
                     throw new InvalidOperationException();
             }
         }
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                GL.DeleteProgram(program);
-
-                disposedValue = true;
-            }
-        }
-
-        ~Shader()
-        {
-            Dispose(disposing: false);
-        }
-
         public void Dispose()
         {
-            Dispose(disposing: true);
+            GL.DeleteProgram(program);
             GC.SuppressFinalize(this);
+        }
+
+        public Shader Get()
+        {
+            return this;
         }
     }
 }
