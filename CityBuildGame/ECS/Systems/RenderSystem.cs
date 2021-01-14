@@ -13,12 +13,7 @@ namespace CityBuildGame.ECS
 
         public void Init()
         {
-            gameWindow.Resize += (e) =>
-            {
-                ref CameraComponent camera = ref cameraFilter.Get1(0);
-                camera.Width = e.Width;
-                camera.Height = e.Height;
-            };
+
         }
 
         public void Run()

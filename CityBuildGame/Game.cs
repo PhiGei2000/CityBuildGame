@@ -11,6 +11,8 @@ using CityBuildGame.Resources;
 using CityBuildGame.ECS;
 using CityBuildGame.Rendering;
 using OpenTK.Mathematics;
+using OpenTK.Windowing.GraphicsLibraryFramework;
+using OpenTK.Windowing.Common;
 
 namespace CityBuildGame
 {
@@ -30,7 +32,7 @@ namespace CityBuildGame
 
             NativeWindowSettings nativeSettings = new NativeWindowSettings()
             {
-                Size = new OpenTK.Mathematics.Vector2i(width, height),
+                Size = new Vector2i(width, height),
                 Title = title
             };
 
@@ -43,23 +45,37 @@ namespace CityBuildGame
             window.Resize += Window_Resize;
         }
 
-        private void Window_KeyUp(OpenTK.Windowing.Common.KeyboardKeyEventArgs e)
+        private void Window_KeyUp(KeyboardKeyEventArgs e)
         {
-            if (e.Key == OpenTK.Windowing.GraphicsLibraryFramework.Keys.Escape)
+            if (e.Key == Keys.Escape)
             {
                 window.Close();
             }
+            else if (e.Key == Keys.F)
+            {
+                if (window.IsFullscreen)
+                {
+                    window.WindowBorder = WindowBorder.Resizable;
+                    window.WindowState = WindowState.Normal;
+                    window.Size = new Vector2i(800, 600);
+                }
+                else
+                {
+                    window.WindowBorder = WindowBorder.Hidden;
+                    window.WindowState = WindowState.Fullscreen;
+                }
+            }
         }
 
-        private void Window_Resize(OpenTK.Windowing.Common.ResizeEventArgs e)
+        private void Window_Resize(ResizeEventArgs e)
         {
             GL.Viewport(0, 0, e.Width, e.Height);
         }
 
-        private void Window_RenderFrame(OpenTK.Windowing.Common.FrameEventArgs e)
+        private void Window_RenderFrame(FrameEventArgs e)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            GL.ClearColor(OpenTK.Mathematics.Color4.LightSkyBlue);
+            GL.ClearColor(Color4.LightSkyBlue);
 
             systems.Run();
 
@@ -82,12 +98,13 @@ namespace CityBuildGame
             world = new EcsWorld();
             systems = new EcsSystems(world)
                 .Add(new RenderSystem())
+                .Add(new CameraSystem())
                 .Inject(window);
 
             systems.Init();
 
             EcsEntity playerEntity = world.NewEntity();
-            playerEntity.Replace(new CameraComponent(window.Size.X, window.Size.Y, new Vector3(0, 5, 5), -90.0f, -45.0f, 60));
+            playerEntity.Replace(new CameraComponent(new Vector3(0, 5, 5), -90.0f, -45.0f, 60));
 
             EcsEntity groundEntity = world.NewEntity();
             groundEntity.Replace(new TransformationComponent()
