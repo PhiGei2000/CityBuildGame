@@ -25,21 +25,14 @@ namespace CityBuildGame.Resources
 
     public class ResourceManager : IDisposable
     {
-        public enum ResourceIDs
-        {
-            GROUND_SHADER,
-            GROUND_TEXTURE,
-            GROUND_GEOMETRY
-        }
-
-        private Dictionary<ResourceIDs, IResource> resources = new Dictionary<ResourceIDs, IResource>();
+        private Dictionary<string, IResource> resources = new Dictionary<string, IResource>();
         private bool disposedValue;
         public ResourceManager()
         {
             LoadResources();
         }
 
-        public IResource<T> GetResource<T>(ResourceIDs resourceID) where T : IResource
+        public IResource<T> GetResource<T>(string resourceID) where T : IResource
         {
             if (resources[resourceID] is IResource<T> value)
             {
@@ -82,7 +75,7 @@ namespace CityBuildGame.Resources
 
         private void LoadResource(ResourceTypes type, XElement resourceElement)
         {
-            ResourceIDs id = Enum.Parse<ResourceIDs>(resourceElement.Attribute("id").Value);
+            string id = resourceElement.Attribute("id").Value;
             string filename = Path.Combine("Resources", resourceElement.Attribute("filename").Value);
             switch (type)
             {
@@ -91,6 +84,9 @@ namespace CityBuildGame.Resources
                     break;
                 case ResourceTypes.GEOMETRY:
                     resources.Add(id, ObjLoader.LoadGeometry(filename));
+                    break;
+                case ResourceTypes.TEXTURE:
+                    resources.Add(id, new Texture(filename));
                     break;
             }
         }

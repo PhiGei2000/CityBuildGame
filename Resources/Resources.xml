@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <Resouces xmlns="http://www.citybuildgame.de/resources">
     <Shaders>
-        <Resource id="GROUND_SHADER" filename="Shaders/ground"/>
+        <Resource id="GROUND_SHADER" filename="Shaders/ground" />
+        <Resource id="STREET_SHADER" filename="Shaders/street" />
     </Shaders>
     <Textures>
-        <!--<Resource id="GROUND_TEXTURE" filename="Textures/ground.png" />-->
+        <Resource id="GROUND_TEXTURE" filename="Textures/ground.png" />
+        <Resource id="STREET_5M_TEXTURE" filename="Textures/street5m.png" />
     </Textures>
     <Geometries>
         <Resource id="GROUND_GEOMETRY" filename="Models/ground.obj" />
+        <Resource id="STREET_5M_GEOMETRY" filename="Models/street5m.obj" />
     </Geometries>
     <Materials>
-
+        <!-- <Material id="MATERIAL_GROUND" diffuse="GROUND_TEXTURE" /> -->
+        <!-- <Material id="MATERIAL_STREET" diffuse="STREET_5M_TEXTURE" /> -->
     </Materials>
 </Resouces>

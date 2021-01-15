@@ -93,6 +93,7 @@ namespace CityBuildGame
         {
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Texture2D);
+
             GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
 
             world = new EcsWorld();
@@ -116,8 +117,24 @@ namespace CityBuildGame
 
             groundEntity.Replace(new RenderComponent()
             {
-                geometry = resources.GetResource<Geometry>(ResourceManager.ResourceIDs.GROUND_GEOMETRY).Get(),
-                shader = resources.GetResource<Shader>(ResourceManager.ResourceIDs.GROUND_SHADER).Get()
+                geometry = resources.GetResource<Geometry>("GROUND_GEOMETRY").Get(),
+                shader = resources.GetResource<Shader>("GROUND_SHADER").Get(),
+                diffuse = resources.GetResource<Texture>("GROUND_TEXTURE").Get()
+            });
+
+            EcsEntity street = world.NewEntity();
+            street.Replace(new TransformationComponent()
+            {
+                Position = new Vector3(0, 0, 0),
+                Rotation = new Quaternion(0, 0, 0),
+                Scale = new Vector3(1, 1, 1)
+            });
+
+            street.Replace(new RenderComponent()
+            {
+                geometry = resources.GetResource<Geometry>("STREET_5M_GEOMETRY").Get(),
+                shader = resources.GetResource<Shader>("STREET_SHADER").Get(),
+                diffuse = resources.GetResource<Texture>("STREET_5M_TEXTURE").Get()
             });
         }
 

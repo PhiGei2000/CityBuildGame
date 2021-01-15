@@ -19,31 +19,28 @@ namespace CityBuildGame.Resources
 
         public Geometry()
         {
-            vbo = GL.GenBuffer();
-            ebo = GL.GenBuffer();
-
             vao = GL.GenVertexArray();
-
             GL.BindVertexArray(vao);
 
+            ebo = GL.GenBuffer();
+            vbo = GL.GenBuffer();
+
             GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 0);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
+
             GL.EnableVertexAttribArray(0);
-
-            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 3 * sizeof(float));
             GL.EnableVertexAttribArray(1);
-
-            GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, 8 * sizeof(float), 6 * sizeof(float));
             GL.EnableVertexAttribArray(2);
+
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 0);
+            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 3 * sizeof(float));
+            GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, 8 * sizeof(float), 6 * sizeof(float));
         }
 
         public void BufferData(Vertex[] vertices, uint[] indices)
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vao);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
-
-            GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * 8 * sizeof(float), vertices, BufferUsageHint.StaticDraw);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, indices.Length * sizeof(uint), indices, BufferUsageHint.StaticDraw);
+            GL.NamedBufferData(vbo, sizeof(float) * 8 * vertices.Length, vertices, BufferUsageHint.StaticDraw);
+            GL.NamedBufferData(ebo, sizeof(uint) * indices.Length, indices, BufferUsageHint.StaticDraw);
 
             drawCount = indices.Length;
         }

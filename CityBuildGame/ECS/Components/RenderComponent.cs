@@ -6,5 +6,6 @@ namespace CityBuildGame.ECS
     {
         public Geometry geometry;
         public Shader shader;
+        public Texture diffuse;
     }
 }
