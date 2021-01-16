@@ -4,10 +4,10 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using CityBuildGame.Rendering;
+using CityBuilderGame.Rendering;
 using OpenTK.Mathematics;
 
-namespace CityBuildGame.Resources
+namespace CityBuilderGame.Resources
 {
     struct Model
     {

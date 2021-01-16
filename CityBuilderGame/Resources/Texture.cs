@@ -3,7 +3,7 @@ using System.Drawing.Imaging;
 
 using OpenTK.Graphics.OpenGL4;
 
-namespace CityBuildGame.Resources
+namespace CityBuilderGame.Resources
 {
     public class Texture : IResource<Texture>
     {

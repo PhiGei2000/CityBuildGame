@@ -1,6 +1,6 @@
-using CityBuildGame.Resources;
+using CityBuilderGame.Resources;
 
-namespace CityBuildGame.ECS
+namespace CityBuilderGame.ECS
 {
     struct RenderComponent
     {

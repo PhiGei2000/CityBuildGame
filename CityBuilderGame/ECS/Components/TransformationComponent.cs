@@ -1,6 +1,6 @@
 using OpenTK.Mathematics;
 
-namespace CityBuildGame.ECS
+namespace CityBuilderGame.ECS
 {
     public struct TransformationComponent
     {

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CityBuildGame.Rendering {
+namespace CityBuilderGame.Rendering {
     public struct Vertex {
         public Vector3 position;
         public Vector3 normal;

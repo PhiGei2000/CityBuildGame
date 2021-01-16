@@ -1,6 +1,6 @@
 using OpenTK.Mathematics;
 
-namespace CityBuildGame.Resources
+namespace CityBuilderGame.Resources
 {
     public class Material : IResource<Material>
     {

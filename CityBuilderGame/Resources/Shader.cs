@@ -5,7 +5,7 @@ using System.IO;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 
-namespace CityBuildGame.Resources
+namespace CityBuilderGame.Resources
 {
     public struct Shader : IResource<Shader>
     {
@@ -58,7 +58,7 @@ namespace CityBuildGame.Resources
             GL.UseProgram(program);
         }
 
-        public void Upload<T>(string location, T value)
+        public void Upload<T>(string location, T value, bool transpose = false)
         {
             int uniformLocation;
             if (uniformLocations.ContainsKey(location))
@@ -82,11 +82,14 @@ namespace CityBuildGame.Resources
                 case Vector3 vec3:
                     GL.Uniform3(uniformLocation, vec3);
                     break;
+                case Vector4 vec4:
+                    GL.Uniform4(uniformLocation, vec4);
+                    break;
                 case Matrix3 mat3:
-                    GL.UniformMatrix3(uniformLocation, false, ref mat3);
+                    GL.UniformMatrix3(uniformLocation, transpose, ref mat3);
                     break;
                 case Matrix4 mat4:
-                    GL.UniformMatrix4(uniformLocation, false, ref mat4);
+                    GL.UniformMatrix4(uniformLocation, transpose, ref mat4);
                     break;
                 default:
                     throw new InvalidOperationException();

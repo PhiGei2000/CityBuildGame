@@ -1,7 +1,7 @@
 using System;
 using OpenTK.Mathematics;
 
-namespace CityBuildGame.ECS
+namespace CityBuilderGame.ECS
 {
     // TODO: Create Camera System
     public struct CameraComponent

@@ -2,14 +2,15 @@ using Leopotam.Ecs;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
 
-namespace CityBuildGame.ECS
+using OpenTK.Graphics.OpenGL4;
+
+namespace CityBuilderGame.ECS
 {
     class RenderSystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
     {
-        private EcsWorld world;
         private EcsFilter<RenderComponent, TransformationComponent> filter;
         private EcsFilter<CameraComponent> cameraFilter;
-        private GameWindow gameWindow;
+        private Game game;
 
         public void Init()
         {
@@ -33,6 +34,10 @@ namespace CityBuildGame.ECS
 
                 renderComponent.geometry.Draw();
             }
+
+            GL.Enable(EnableCap.Blend);
+            game.MainMenu.Render();
+            GL.Disable(EnableCap.Blend);
         }
 
         public void Destroy()

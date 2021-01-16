@@ -5,7 +5,7 @@ using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
-namespace CityBuildGame.ECS
+namespace CityBuilderGame.ECS
 {
     public class CameraSystem : IEcsInitSystem, IEcsRunSystem
     {

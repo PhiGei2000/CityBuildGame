@@ -7,21 +7,25 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Graphics.OpenGL4;
 using Leopotam.Ecs;
 
-using CityBuildGame.Resources;
-using CityBuildGame.ECS;
-using CityBuildGame.Rendering;
+using ResourceManager = CityBuilderGame.Resources.ResourceManager;
+using CityBuilderGame.ECS;
+using CityBuilderGame.Rendering;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Windowing.Common;
+using System.Resources;
+using CityBuilderGame.Resources;
+using CityBuilderGame.UI;
 
-namespace CityBuildGame
+namespace CityBuilderGame
 {
     public class Game : IDisposable
     {
-        private ResourceManager resources;
         private GameWindow window;
         private EcsWorld world;
         private EcsSystems systems;
+
+        public UIComponent MainMenu;
 
         public Game(int width, int height, string title)
         {
@@ -37,7 +41,6 @@ namespace CityBuildGame
             };
 
             window = new GameWindow(windowSettings, nativeSettings);
-            resources = new ResourceManager();
             Init();
 
             window.RenderFrame += Window_RenderFrame;
@@ -75,7 +78,6 @@ namespace CityBuildGame
         private void Window_RenderFrame(FrameEventArgs e)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            GL.ClearColor(Color4.LightSkyBlue);
 
             systems.Run();
 
@@ -84,15 +86,17 @@ namespace CityBuildGame
 
         public void Dispose()
         {
-            resources.Dispose();
+            ResourceManager.Free();
 
             window.Dispose();
         }
 
         public void Init()
         {
+            GL.ClearColor(Color4.LightSkyBlue);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Texture2D);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
             GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
 
@@ -100,7 +104,8 @@ namespace CityBuildGame
             systems = new EcsSystems(world)
                 .Add(new RenderSystem())
                 .Add(new CameraSystem())
-                .Inject(window);
+                .Inject(window)
+                .Inject(this);
 
             systems.Init();
 
@@ -117,25 +122,25 @@ namespace CityBuildGame
 
             groundEntity.Replace(new RenderComponent()
             {
-                geometry = resources.GetResource<Geometry>("GROUND_GEOMETRY").Get(),
-                shader = resources.GetResource<Shader>("GROUND_SHADER").Get(),
-                diffuse = resources.GetResource<Texture>("GROUND_TEXTURE").Get()
+                geometry = ResourceManager.GetResource<Geometry>("GROUND_GEOMETRY").Get(),
+                shader = ResourceManager.GetResource<Shader>("GROUND_SHADER").Get(),
+                diffuse = ResourceManager.GetResource<Texture>("GROUND_TEXTURE").Get()
             });
 
-            EcsEntity street = world.NewEntity();
-            street.Replace(new TransformationComponent()
+            MainMenu = new UIComponent()
             {
-                Position = new Vector3(0, 0, 0),
-                Rotation = new Quaternion(0, 0, 0),
-                Scale = new Vector3(1, 1, 1)
-            });
-
-            street.Replace(new RenderComponent()
-            {
-                geometry = resources.GetResource<Geometry>("STREET_5M_GEOMETRY").Get(),
-                shader = resources.GetResource<Shader>("STREET_SHADER").Get(),
-                diffuse = resources.GetResource<Texture>("STREET_5M_TEXTURE").Get()
-            });
+                Position = new UiConstraint()
+                {
+                    X = new AbsoluteConstraint(0.2f),
+                    Y = new AbsoluteConstraint(0.2f)
+                },
+                Size = new UiConstraint()
+                {
+                    X = new RelativeConstraint(0.6f),
+                    Y = new RelativeConstraint(0.6f)
+                },
+                BackgroundColor = new Color4(0.2f, 0.2f, 0.2f, 0.5f)
+            };
         }
 
         public void Run()

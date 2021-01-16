@@ -1,16 +1,24 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<Resouces xmlns="http://www.citybuildgame.de/resources">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Resouces xmlns="http://www.citybuildgame.de/resources" xmlns:geometry="http://www.citybuildgame.de/resources/geometry">
     <Shaders>
         <Resource id="GROUND_SHADER" filename="Shaders/ground" />
         <Resource id="STREET_SHADER" filename="Shaders/street" />
+        <Resource id="RENDER_QUAD_SHADER" filename="Shaders/renderQuad"/>
     </Shaders>
     <Textures>
         <Resource id="GROUND_TEXTURE" filename="Textures/ground.png" />
-        <Resource id="STREET_5M_TEXTURE" filename="Textures/street5m.png" />
+        <Resource id="STREET_TEXTURE" filename="Textures/streetTextureArray.png" />
     </Textures>
     <Geometries>
         <Resource id="GROUND_GEOMETRY" filename="Models/ground.obj" />
         <Resource id="STREET_5M_GEOMETRY" filename="Models/street5m.obj" />
+        <!-- <Resource id="RENDER_QUAD_GEOMETRY">
+            <geometry:VertexAttributes>
+                <geometry:VertexAttribute location="0" size="2" type="Float" />
+            </geometry:VertexAttributes>
+            <geometry:VertexData>0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0</geometry:VertexData>
+            <geometry:Indices>0, 1, 2, 0, 3, 2</geometry:Indices>
+        </Resource> -->
     </Geometries>
     <Materials>
         <!-- <Material id="MATERIAL_GROUND" diffuse="GROUND_TEXTURE" /> -->

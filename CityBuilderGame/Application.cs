@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace CityBuildGame
+namespace CityBuilderGame
 {
     class Application
     {
