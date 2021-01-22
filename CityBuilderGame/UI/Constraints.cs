@@ -3,57 +3,73 @@ using OpenTK.Mathematics;
 
 namespace CityBuilderGame.UI
 {
-    public interface IConstraint
+
+    public enum Alignment
     {
-        float GetValue(float parentValue);
+        CENTER, START, END
     }
 
-    public struct AbsoluteConstraint : IConstraint
+    public interface IConstraint
     {
-        private float value;
+        float GetValue(float value);
+    }
 
-        public float Value { set => this.value = value; }
+    public class AbsoluteConstraint : IConstraint
+    {
+        public float Value { get; set; }
 
         public AbsoluteConstraint(float value)
         {
-            this.value = value;
+            Value = value;
         }
 
-        public float GetValue(float parentValue)
+        public float GetValue(float value)
         {
-            return value;
-        }
-    }
-
-    public struct RelativeConstraint : IConstraint
-    {
-        private float factor;
-
-        public float RelativeSize { set => factor = value; }
-
-        public RelativeConstraint(float relativeSize)
-        {
-            factor = relativeSize;
+            return Value;
         }
 
-        public float GetValue(float parentValue)
+        public static implicit operator AbsoluteConstraint(float value)
         {
-            return parentValue * factor;
+            return new AbsoluteConstraint(value);
         }
     }
 
-    public struct UiConstraint
+    public class RelativeConstraint : IConstraint
     {
-        public IConstraint X { get; set; }
+        public float Factor { get; set; }
 
-        public IConstraint Y { get; set; }
-
-        public Vector2 GetValue(Vector2 parentValue)
+        public RelativeConstraint(float factor)
         {
-            return new Vector2(
-                X.GetValue(parentValue.X),
-                Y.GetValue(parentValue.Y)
-            );
+            Factor = factor;
+        }
+
+        public float GetValue(float value)
+        {
+            return value * Factor;
+        }
+    }
+
+    public class BoxConstraint
+    {
+        public IConstraint Top { get; set; }
+
+        public IConstraint Right { get; set; }
+
+        public IConstraint Bottom { get; set; }
+
+        public IConstraint Left { get; set; }
+
+        public BoxConstraint(IConstraint length)
+        {
+            Top = Right = Bottom = Left = length;
+        }
+
+        public BoxConstraint(IConstraint top, IConstraint right, IConstraint bottom, IConstraint left)
+        {
+            Top = top;
+            Right = right;
+            Bottom = bottom;
+            Left = left;
         }
     }
 }

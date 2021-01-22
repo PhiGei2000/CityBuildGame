@@ -10,7 +10,6 @@ namespace CityBuilderGame.ECS
     {
         private EcsFilter<RenderComponent, TransformationComponent> filter;
         private EcsFilter<CameraComponent> cameraFilter;
-        private Game game;
 
         public void Init()
         {
@@ -34,10 +33,6 @@ namespace CityBuilderGame.ECS
 
                 renderComponent.geometry.Draw();
             }
-
-            GL.Enable(EnableCap.Blend);
-            game.MainMenu.Render();
-            GL.Disable(EnableCap.Blend);
         }
 
         public void Destroy()

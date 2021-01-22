@@ -3,7 +3,8 @@
     <Shaders>
         <Resource id="GROUND_SHADER" filename="Shaders/ground" />
         <Resource id="STREET_SHADER" filename="Shaders/street" />
-        <Resource id="RENDER_QUAD_SHADER" filename="Shaders/renderQuad"/>
+        <Resource id="RENDER_QUAD_SHADER" filename="Shaders/gui" />
+        <Resource id="TEXTURED_QUAD_SHADER" filename="Shaders/texturedQuad" />
     </Shaders>
     <Textures>
         <Resource id="GROUND_TEXTURE" filename="Textures/ground.png" />
@@ -12,6 +13,10 @@
     <Geometries>
         <Resource id="GROUND_GEOMETRY" filename="Models/ground.obj" />
         <Resource id="STREET_5M_GEOMETRY" filename="Models/street5m.obj" />
+        <Resource id="STREET_5M_CENTERLINE_GEOMETRY" filename="Models/street5m_centerLine.obj" />
+        <Resource id="STREET_CURVE_GEOMETRY" filename="Models/street_curve.obj" />
+        <Resource id="STREET_T_CROSSING_GEOMETRY" filename="Models/street_t_crossing.obj" />
+        <Resource id="STREET_CROSSING" filename="Models/street_crossing.obj" />
         <!-- <Resource id="RENDER_QUAD_GEOMETRY">
             <geometry:VertexAttributes>
                 <geometry:VertexAttribute location="0" size="2" type="Float" />

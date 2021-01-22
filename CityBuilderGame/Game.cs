@@ -25,7 +25,7 @@ namespace CityBuilderGame
         private EcsWorld world;
         private EcsSystems systems;
 
-        public UIComponent MainMenu;
+        public MainMenu MainMenu;
 
         public Game(int width, int height, string title)
         {
@@ -81,6 +81,9 @@ namespace CityBuilderGame
 
             systems.Run();
 
+            Vector2 size = window.Size;
+            MainMenu.Draw(in size);
+
             window.SwapBuffers();
         }
 
@@ -122,25 +125,13 @@ namespace CityBuilderGame
 
             groundEntity.Replace(new RenderComponent()
             {
-                geometry = ResourceManager.GetResource<Geometry>("GROUND_GEOMETRY").Get(),
-                shader = ResourceManager.GetResource<Shader>("GROUND_SHADER").Get(),
-                diffuse = ResourceManager.GetResource<Texture>("GROUND_TEXTURE").Get()
+                geometry = ResourceManager.GetResource<Geometry>("GROUND_GEOMETRY"),
+                shader = ResourceManager.GetResource<Shader>("GROUND_SHADER"),
+                diffuse = ResourceManager.GetResource<Texture>("GROUND_TEXTURE")
             });
 
-            MainMenu = new UIComponent()
-            {
-                Position = new UiConstraint()
-                {
-                    X = new AbsoluteConstraint(0.2f),
-                    Y = new AbsoluteConstraint(0.2f)
-                },
-                Size = new UiConstraint()
-                {
-                    X = new RelativeConstraint(0.6f),
-                    Y = new RelativeConstraint(0.6f)
-                },
-                BackgroundColor = new Color4(0.2f, 0.2f, 0.2f, 0.5f)
-            };
+            MainMenu = new MainMenu();
+            window.Resize += (e) => MainMenu.Resize(e.Width, e.Height);
         }
 
         public void Run()

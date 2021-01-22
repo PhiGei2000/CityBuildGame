@@ -18,26 +18,25 @@ namespace CityBuilderGame.Resources
 
     public interface IResource<T> : IResource where T : IResource
     {
-        T Get();
     }
 
     public enum ResourceTypes
     {
-        SHADER, TEXTURE, GEOMETRY, MATERIAL
+        SHADER, TEXTURE, GEOMETRY, MATERIAL, FONT
     }
 
     public static class ResourceManager
     {
         private static Dictionary<string, IResource> resources = new Dictionary<string, IResource>();
-        private static bool disposedValue;
+        private static bool disposedValue = false;
         static ResourceManager()
         {
             LoadResources();
         }
 
-        public static IResource<T> GetResource<T>(string resourceID) where T : IResource
+        public static T GetResource<T>(string resourceID) where T : IResource
         {
-            if (resources[resourceID] is IResource<T> value)
+            if (resources[resourceID] is T value)
             {
                 return value;
             }
@@ -74,8 +73,14 @@ namespace CityBuilderGame.Resources
                 }
             }
 
+            // TODO: Move this to resource file
             // create renderQuad geometry
-            float[] vertices = { 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f };
+            float[] vertices = {
+                0.0f, 0.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f,
+                0.0f, 1.0f };
+
             uint[] indices = { 0, 1, 2, 0, 3, 1 };
 
             Geometry renderQuad = new Geometry(new VertexAttribute()
@@ -86,6 +91,30 @@ namespace CityBuilderGame.Resources
             });
             renderQuad.BufferData(vertices, indices, 2 * sizeof(float));
             resources.Add("RENDER_QUAD_GEOMETRY", renderQuad);
+
+            // create texturedRenderQuad geometry
+            vertices = new float[] {
+                0.0f, 0.0f, 0.0f, 0.0f,
+                1.0f, 1.0f, 1.0f, 1.0f,
+                1.0f, 0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f, 1.0f };
+
+            Geometry texturedRenderQuad = new Geometry(
+                new VertexAttribute()
+                {
+                    Location = 0,
+                    Size = 2,
+                    Type = VertexAttribPointerType.Float
+                },
+                new VertexAttribute()
+                {
+                    Location = 1,
+                    Size = 2,
+                    Type = VertexAttribPointerType.Float
+                }
+            );
+            texturedRenderQuad.BufferData(vertices, indices, 4 * sizeof(float));
+            resources.Add("TEXTURED_RENDER_QUAD_GEOMETRY", texturedRenderQuad);
         }
 
         private static void LoadResource(ResourceTypes type, XElement resourceElement)
@@ -131,9 +160,14 @@ namespace CityBuilderGame.Resources
 
         public static void Free()
         {
-            foreach (var (_, resource) in resources)
+            if (!disposedValue)
             {
-                resource.Dispose();
+                foreach (var (_, resource) in resources)
+                {
+                    resource.Dispose();
+                }
+
+                disposedValue = true;
             }
         }
     }

@@ -31,19 +31,8 @@ namespace CityBuilderGame.Resources
 
         public void Dispose()
         {
-            if (active)
-            {
-                GL.ActiveTexture(activeUnit);
-                GL.BindTexture(TextureTarget.Texture2D, 0);
-            }
-
             GL.DeleteTexture(texture);
             System.GC.SuppressFinalize(this);
-        }
-
-        public Texture Get()
-        {
-            return this;
         }
     }
 }

@@ -6,8 +6,6 @@ using CityBuilderGame.Rendering;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 
-using CityBuilderGame.Rendering;
-
 namespace CityBuilderGame.Resources
 {
     public class Geometry : IResource<Geometry>

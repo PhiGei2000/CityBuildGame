@@ -73,6 +73,9 @@ namespace CityBuilderGame.Resources
 
             switch (value)
             {
+                case int it:
+                    GL.Uniform1(uniformLocation, it);
+                    break;
                 case float fl:
                     GL.Uniform1(uniformLocation, fl);
                     break;
