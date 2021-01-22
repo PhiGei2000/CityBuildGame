@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 using CityBuilderGame.Resources;
 using OpenTK.Mathematics;
@@ -7,6 +8,8 @@ namespace CityBuilderGame.UI
 {
     public class UIComponent
     {
+        protected bool mouseOver = false;
+
         internal RectangleF parentSize;
 
         public UIComponent Parent { get; internal set; }
@@ -30,6 +33,10 @@ namespace CityBuilderGame.UI
         public Color4 BorderColor { get; set; } = Color4.Black;
 
         public bool IsVisible { get; set; } = true;
+
+        public event EventHandler OnMouseEnter;
+        public event EventHandler OnMouseLeave;
+        public event EventHandler<OpenTK.Windowing.Common.MouseButtonEventArgs> OnMouseDown;
 
         public virtual void Render(in Matrix4 projection, in Vector2 windowSize)
         {
@@ -104,6 +111,34 @@ namespace CityBuilderGame.UI
             outerArea.Width -= paddingLeft + paddingRight;
 
             return outerArea;
+        }
+
+        internal virtual void HandleOnMouseMove(OpenTK.Windowing.Common.MouseMoveEventArgs e)
+        {
+            Vector2 pos = e.Position;
+            RectangleF innerArea = GetInnerRectangle();
+
+            bool pointInArea = pos.X >= innerArea.X && pos.X <= innerArea.X + innerArea.Width
+                            && pos.Y >= innerArea.Y && pos.Y <= innerArea.Y + innerArea.Height;
+
+            if (pointInArea && !mouseOver)
+            {
+                OnMouseEnter?.Invoke(this, new EventArgs());
+                mouseOver = true;
+            }
+            else if (!pointInArea && mouseOver)
+            {
+                OnMouseLeave?.Invoke(this, new EventArgs());
+                mouseOver = false;
+            }
+        }
+
+        internal virtual void HandleOnMouseDown(OpenTK.Windowing.Common.MouseButtonEventArgs e)
+        {
+            if (mouseOver)
+            {
+                OnMouseDown?.Invoke(this, e);
+            }
         }
     }
 }

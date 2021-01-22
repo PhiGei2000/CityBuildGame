@@ -1,6 +1,9 @@
+using System;
+using System.Drawing;
+
 using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL4;
-using System.Drawing;
+using OpenTK.Windowing.Desktop;
 
 namespace CityBuilderGame.UI
 {
@@ -16,7 +19,9 @@ namespace CityBuilderGame.UI
             set => mainLayout.IsVisible = value;
         }
 
-        public MainMenu()
+        public event EventHandler OnButtonClick;
+
+        public MainMenu(GameWindow window)
         {
             mainLayout = new StackLayout
             {
@@ -27,24 +32,57 @@ namespace CityBuilderGame.UI
                 BackgroundColor = Color4.Transparent,
                 Spacing = new AbsoluteConstraint(10)
             };
+            window.MouseMove += mainLayout.HandleOnMouseMove;
+            window.MouseDown += mainLayout.HandleOnMouseDown;
 
-            mainLayout.AddChild(new Label("New Game")
+            EventHandler eventHandlerMouseEnter = (sender, e) =>
             {
-                Height = new AbsoluteConstraint(50),
-                Width = new AbsoluteConstraint(100),
-                BackgroundColor = new Color4(0.1f, 0.1f, 0.7f, 0.2f)
-            });
+                (sender as UIComponent).BackgroundColor = new Color4(0.0f, 0.0f, 0.7f, 0.5f);
+            };
+
+            EventHandler eventHandlerMouseLeave = (sender, e) =>
+            {
+                (sender as UIComponent).BackgroundColor = new Color4(0.1f, 0.1f, 0.7f, 0.2f);
+            };
+
+            EventHandler eventHandlerButtonClick = (sender, e) =>
+            {
+                OnButtonClick?.Invoke(sender, e);
+            };
+
+            Button CreateButton(string title)
+            {
+                Button button = new Button(title)
+                {
+                    Height = new AbsoluteConstraint(30),
+                    Width = new AbsoluteConstraint(100),
+                    BackgroundColor = new Color4(0.1f, 0.1f, 0.7f, 0.2f)
+                };
+                button.OnMouseEnter += eventHandlerMouseEnter;
+                button.OnMouseLeave += eventHandlerMouseLeave;
+                button.OnClick += eventHandlerButtonClick;
+
+                return button;
+            }
+
+            mainLayout.AddChild(CreateButton("New Game"));
+            mainLayout.AddChild(CreateButton("Load Game"));
+            mainLayout.AddChild(CreateButton("Settings"));
+            mainLayout.AddChild(CreateButton("Quit"));
         }
 
         public void Draw(in Vector2 windowSize)
         {
-            GL.Enable(EnableCap.Blend);
-            GL.Disable(EnableCap.DepthTest);
+            if (IsVisible)
+            {
+                GL.Enable(EnableCap.Blend);
+                GL.Disable(EnableCap.DepthTest);
 
-            mainLayout.Render(in projection, in windowSize);
+                mainLayout.Render(in projection, in windowSize);
 
-            GL.Disable(EnableCap.Blend);
-            GL.Enable(EnableCap.DepthTest);
+                GL.Disable(EnableCap.Blend);
+                GL.Enable(EnableCap.DepthTest);
+            }
         }
 
         public void Resize(int width, int height)

@@ -18,10 +18,28 @@ namespace CityBuilderGame.UI
 
         private string text;
 
+        public string Text
+        {
+            get => text;
+            set
+            {
+                text = value;
+                UpdateText();
+            }
+        }
+
         public Label(string text)
         {
             renderer = new TextRenderer(1, 1);
             this.text = text;
+        }
+
+        private void UpdateText()
+        {
+            renderer.Clear();
+            PointF textPos = GetTextPosition();
+
+            renderer.DrawString(text, Font, Brushes.Black, textPos);
         }
 
         public override void Render(in Matrix4 projection, in Vector2 windowSize)
@@ -31,10 +49,9 @@ namespace CityBuilderGame.UI
             RectangleF innerArea = GetInnerRectangle();
             if (innerArea.Size != renderer.Size)
             {
-                PointF textPos = GetTextPosition();
-
                 renderer.Resize((int)innerArea.Width, (int)innerArea.Height);
-                renderer.DrawString(text, Font, Brushes.Black, textPos);
+
+                UpdateText();
             }
 
             Matrix3 transform = new Matrix3(
@@ -55,7 +72,6 @@ namespace CityBuilderGame.UI
             texturedShader.Upload("transform", transform, true);
 
             renderQuad.Draw();
-
         }
 
         private PointF GetTextPosition()

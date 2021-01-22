@@ -52,7 +52,7 @@ namespace CityBuilderGame
         {
             if (e.Key == Keys.Escape)
             {
-                window.Close();
+                MainMenu.IsVisible = !MainMenu.IsVisible;
             }
             else if (e.Key == Keys.F)
             {
@@ -130,13 +130,27 @@ namespace CityBuilderGame
                 diffuse = ResourceManager.GetResource<Texture>("GROUND_TEXTURE")
             });
 
-            MainMenu = new MainMenu();
+            MainMenu = new MainMenu(window);
             window.Resize += (e) => MainMenu.Resize(e.Width, e.Height);
+            MainMenu.OnButtonClick += HandleMainMenuButton_Click;
         }
 
         public void Run()
         {
             window.Run();
+        }
+
+        public void HandleMainMenuButton_Click(object sender, EventArgs e)
+        {
+            switch ((sender as Button).Text)
+            {
+                case "Quit":
+                    window.Close();
+                    break;
+                case "New Game":
+                    MainMenu.IsVisible = false;
+                    break;
+            }
         }
     }
 }

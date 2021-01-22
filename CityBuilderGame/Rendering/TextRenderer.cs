@@ -69,14 +69,11 @@ namespace CityBuilderGame.Rendering
 
         public void Upload()
         {
+            GL.BindTexture(TextureTarget.Texture2D, texture);
             if (dirty_region != Rectangle.Empty)
             {
-#if DEBUG
-                bitmap.Save("text.bmp");
-#endif
                 BitmapData data = bitmap.LockBits(dirty_region, ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-                GL.BindTexture(TextureTarget.Texture2D, texture);
                 GL.TexSubImage2D(TextureTarget.Texture2D, 0, dirty_region.X, dirty_region.Y, dirty_region.Width, dirty_region.Height, OpenTK.Graphics.OpenGL4.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
 
                 bitmap.UnlockBits(data);

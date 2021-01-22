@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
 using static CityBuilderGame.UI.StackOrientation;
 
 namespace CityBuilderGame.UI
@@ -40,6 +41,22 @@ namespace CityBuilderGame.UI
                 child.Render(in projection, in windowSize);
             }
 
+        }
+
+        internal override void HandleOnMouseMove(MouseMoveEventArgs e)
+        {
+            foreach (var child in children)
+            {
+                child.HandleOnMouseMove(e);
+            }
+        }
+
+        internal override void HandleOnMouseDown(MouseButtonEventArgs e)
+        {
+            foreach (var child in children)
+            {
+                child.HandleOnMouseDown(e);
+            }
         }
 
         protected abstract void UpdateChildPositions(in Vector2 windowSize);
